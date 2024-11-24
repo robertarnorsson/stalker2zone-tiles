@@ -23,7 +23,7 @@ app.get(':v/:z/:x/:y', async (c) => {
   }
 
   try {
-    const tilePath = `${v}/${z}/${x}/${y}.jpg`;
+    const tilePath = `${v}/${z}/${y}/${x}.jpg`;
 
     const tile = await BUCKET.get(tilePath);
 
