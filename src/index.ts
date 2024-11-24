@@ -10,16 +10,20 @@ app.get('/', (c) => {
   return c.text('Tile server for stalker2.zone')
 })
 
-app.get(':z/:x/:y', async (c) => {
+app.get(':v/:z/:x/:y', async (c) => {
   const { BUCKET } = c.env;
-  const { z, x, y } = c.req.param();
+  const { v, z, x, y } = c.req.param();
+
+  if (!/^v([1-9]|[1-9][0-9])$/.test(v)) {
+    return c.text('Invalid version format. Must be v1-v99.', 400);
+  }
 
   if (isNaN(Number(z)) || isNaN(Number(x)) || isNaN(Number(y))) {
     return c.text('Invalid tile coordinates', 400);
   }
 
   try {
-    const tilePath = `${z}/${x}/${y}.jpg`;
+    const tilePath = `${v}/${z}/${x}/${y}.jpg`;
 
     const tile = await BUCKET.get(tilePath);
 
@@ -37,15 +41,15 @@ app.get(':z/:x/:y', async (c) => {
     });
   } catch (error) {
     console.error('Error fetching tile.');
-    
+
     if (error instanceof TypeError) {
       return c.text('Invalid tile format or bucket configuration', 500);
     } else if (error instanceof RangeError) {
       return c.text('Tile coordinates are out of range', 400);
     }
-    
+
     return c.text('Internal Server Error', 500);
   }
 });
 
-export default app
+export default app;
