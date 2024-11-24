@@ -1,0 +1,9 @@
+name = "stalker2zone-tiles"
+main = "src/index.ts"
+compatibility_date = "2024-11-24"
+
+# compatibility_flags = [ "nodejs_compat" ]
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "stalker2-tiles"
