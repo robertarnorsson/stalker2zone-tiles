@@ -10,6 +10,13 @@ app.get('/', (c) => {
   return c.text('Tile server for stalker2.zone')
 })
 
+app.use('*', (c, next) => {
+  c.header('Access-Control-Allow-Origin', '*');
+  c.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  c.header('Access-Control-Allow-Headers', 'Content-Type');
+  return next();
+});
+
 app.get(':v/:z/:x/:y', async (c) => {
   const { BUCKET } = c.env;
   const { v, z, x, y } = c.req.param();
